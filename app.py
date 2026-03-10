@@ -4,7 +4,42 @@ import numpy as np
 import joblib
 import plotly.graph_objects as go
 from plotly.subplots import make_subplots
+import sys
 
+import os
+import time
+
+st.write("🚀 Начало выполнения скрипта")
+st.write(f"Текущая директория: {os.getcwd()}")
+st.write(f"Файлы в директории: {os.listdir('.')}")
+
+# Проверка размера файлов
+if os.path.exists('model_h2.pkl'):
+    size_mb = os.path.getsize('model_h2.pkl') / (1024 * 1024)
+    st.write(f"📊 model_h2.pkl: {size_mb:.2f} MB")
+else:
+    st.error("❌ model_h2.pkl НЕ НАЙДЕН!")
+
+if os.path.exists('scaler.pkl'):
+    size_mb = os.path.getsize('scaler.pkl') / (1024 * 1024)
+    st.write(f"📊 scaler.pkl: {size_mb:.2f} MB")
+else:
+    st.error("❌ scaler.pkl НЕ НАЙДЕН!")
+
+st.write("⏳ Загрузка модели...")
+start_time = time.time()
+
+# Загрузка модели
+try:
+    model = joblib.load('model_h2.pkl')
+    scaler = joblib.load('scaler.pkl')
+    load_time = time.time() - start_time
+    st.success(f"✅ Модель загружена за {load_time:.2f} секунд")
+except Exception as e:
+    st.error(f"❌ Ошибка загрузки модели: {e}")
+    st.stop()
+
+st.write("✅ Скрипт продолжает работу...")
 # Настройка страницы
 st.set_page_config(
     page_title="Цифровой советчик риформинга",
